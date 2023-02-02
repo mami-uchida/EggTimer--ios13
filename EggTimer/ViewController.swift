@@ -19,19 +19,21 @@ class ViewController: UIViewController {
     var timer = Timer()
     
     
-    //各hardnessSelectedボタンが押された時のアクション
+   
     @IBAction func hardnessSelected(_ sender: UIButton) {
         
         
         timer.invalidate()
-        let hardness = sender.currentTitle! //Soft, Medium, Hard
-        totalTime = eggTimes[hardness]!
+        guard let hardness = sender.currentTitle, let eggTime = eggTimes[hardness] else { return } 
+        totalTime = eggTime
+        
+        
         
         progressBar.progress = 0.0
         secondsPassed = 0
         titleLabel.text = hardness
         
-        //タイマーの設定
+      
         timer = Timer.scheduledTimer(timeInterval:  1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
     }
     
@@ -41,7 +43,7 @@ class ViewController: UIViewController {
         if secondsPassed < totalTime {
             secondsPassed += 1
             progressBar.progress = Float(secondsPassed) / Float(totalTime)
-            //タイマーが停止したらtitleLabelに『DONE!』と表示させる
+         
         } else {
             timer.invalidate()
             titleLabel.text = "DONE!"
